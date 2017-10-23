@@ -6,7 +6,7 @@ from shutil import copyfile
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-from keras.layers import Flatten, Dense, Lambda, Cropping2D
+from keras.layers import Flatten, Dense, Lambda, Cropping2D, Dropout
 from keras.layers.convolutional import Convolution2D
 from keras.models import Sequential
 from sklearn.model_selection import train_test_split
@@ -15,10 +15,22 @@ from sklearn.utils import shuffle
 STEERING_CORRECTION = 0.2
 N_EPOCHS = 3
 IMAGE_SCALING_FACTOR = 0.5
-ADD_FLIPPED_IMAGES = False
+ADD_FLIPPED_IMAGES = True
 DEFAULT_IMAGE_WIDTH = 320
 DEFAULT_IMAGE_HEIGHT = 160
 DEFAULT_IMAGE_CHANNEL = 3
+DEFAULT_IMAGE_SIZE = (
+    DEFAULT_IMAGE_HEIGHT,
+    DEFAULT_IMAGE_WIDTH,
+    DEFAULT_IMAGE_CHANNEL)
+IMAGE_CROP_TOP = 70
+IMAGE_CROP_BOTTOM = 25
+IMAGE_CROP_LEFT = 0
+IMAGE_CROP_RIGHT = 0
+CROPPED_IMAGE_SIZE = (
+    DEFAULT_IMAGE_HEIGHT - IMAGE_CROP_TOP - IMAGE_CROP_BOTTOM,
+    DEFAULT_IMAGE_WIDTH - IMAGE_CROP_LEFT - IMAGE_CROP_RIGHT,
+    DEFAULT_IMAGE_CHANNEL)
 SCALED_IMAGE_WIDTH = int(IMAGE_SCALING_FACTOR * DEFAULT_IMAGE_WIDTH)
 SCALED_IMAGE_HEIGHT = int(IMAGE_SCALING_FACTOR * DEFAULT_IMAGE_HEIGHT)
 DRIVING_LOG_CSV_FILE_NAME = 'driving_log.csv'
@@ -133,14 +145,15 @@ validation_generator = generator(validation_samples, batch_size=32)
 
 # Use Nvidia's CNN for autonomous driving
 model = Sequential()
-model.add(
-    Lambda(lambda x: x / 255.0 - 0.5, input_shape=(DEFAULT_IMAGE_HEIGHT, DEFAULT_IMAGE_WIDTH, DEFAULT_IMAGE_CHANNEL)))
-model.add(Cropping2D(cropping=((70, 25), (0, 0))))
+model.add(Cropping2D(cropping=((70, 25), (0, 0)), input_shape=DEFAULT_IMAGE_SIZE))
+model.add(Lambda(lambda x: x / 255.0 - 0.5))
 model.add(Convolution2D(24, 5, 5, subsample=(2, 2), activation='relu'))
 model.add(Convolution2D(36, 5, 5, subsample=(2, 2), activation='relu'))
 model.add(Convolution2D(48, 5, 5, subsample=(2, 2), activation='relu'))
 model.add(Convolution2D(64, 3, 3, activation='relu'))
+model.add(Dropout(0.3))
 model.add(Convolution2D(64, 3, 3, activation='relu'))
+model.add(Dropout(0.3))
 model.add(Flatten())
 model.add(Dense(100))
 model.add(Dense(50))

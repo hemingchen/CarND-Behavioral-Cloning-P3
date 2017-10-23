@@ -39,9 +39,9 @@ The input data is also normalized and cropped to speed up the training process.
 
 ####2. Attempts to reduce overfitting in the model
 
-My model turned out OK without dropout layers.
+I added dropout layer after each of the two 3x3 convolution layers.
 
-Instead, I trained the model with both udacity data and my own driving data sets, including one lap driving in the reverse direction, which helped reduce the overfitting (model.py lines 27-40).
+I also trained the model with both udacity data and my own driving data sets, including one lap driving in the reverse direction, which helped reduce the overfitting (model.py lines 27-40).
 
 
 ####3. Model parameter tuning
@@ -73,19 +73,24 @@ Therefore in the final step, I removed the recovery driving data set and trained
 
 ####2. Final Model Architecture
 
-The final model architecture (model.py lines 142-155) is the same as the NVIDIA model that consisted of a convolution neural network with the following layers and layer sizes:
+The final model architecture (model.py lines 142-157) is the same as the NVIDIA model that consisted of a convolution neural network with the following layers and layer sizes:
 1. 5x5 filter with depth of 24 and RELU activation
 2. 5x5 filter with depth of 36 and RELU activation
 3. 5x5 filter with depth of 48 and RELU activation
 4. 3x3 filter with depth of 64 and RELU activation
-5. 3x3 filter with depth of 64 and RELU activation
-6. Fully connected layer with 100 outputs
-7. Fully connected layer with 50 outputs
-8. Final layer with 1 output
+5. dropout layer - 0.3
+6. 3x3 filter with depth of 64 and RELU activation
+7. dropout layer - 0.3
+8. Fully connected layer with 100 outputs
+9. Fully connected layer with 50 outputs
+10. Final layer with 1 output
 
 ####3. Creation of the Training Set & Training Process
 
 To capture good driving behavior, I first recorded two laps on track one using center lane driving.
+
+Here is an example image of center lane driving:
+![Image Cropping][./writeup_images/before_and_after_crop.jpg]
 
 I then recorded another two laps driving in the center of the lane.
 
@@ -95,7 +100,7 @@ I later added another 4 sets of center lane driving data.
 
 To augment the data sat, I drove another two laps in the reverse direction.
 
-I didn't flip the image as it would double the training set and I wasn't able to train the model on GPU.
+I also flipped the images to expand the training set and reduce overfitting to couterclockwise driving.
 
 I finally randomly shuffled the data set and put 20% of the data into a validation set.
 
