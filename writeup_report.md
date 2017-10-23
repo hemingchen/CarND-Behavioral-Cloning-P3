@@ -91,7 +91,7 @@ To capture good driving behavior, I first recorded two laps on track one using c
 
 Here is an example image of center lane driving:
 
-![Image Cropping][https://github.com/hemingchen/CarND-Behavioral-Cloning-P3/blob/master/writeup_images/before_and_after_crop.jpg]
+![before_and_after_crop](writeup_images/before_and_after_crop.jpg)
 
 I then recorded another two laps driving in the center of the lane.
 
