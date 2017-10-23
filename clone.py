@@ -39,8 +39,6 @@ SELECTED_DATA_SETS = [
     'center_lane_driving_6',
     'udacity']
 MODEL_META_FILE_NAME = "meta.txt"
-WINDOWS_PATH_PREFIX_TO_REMOVE = "C:\\Users\\hchen\\Desktop\\windows_sim\\data\\"
-MACOS_PATH_PREFIX_TO_REMOVE = "/Users/frishen/Desktop/udacity/data/"
 
 
 def read_csv_lines(file_path, img_path_prefix=None):
@@ -54,13 +52,7 @@ def read_csv_lines(file_path, img_path_prefix=None):
             else:
                 for i in range(0, 3):
                     # Clean up the image path since data was recorded on Windows/macOS
-                    line[i] = line[i] \
-                        .strip() \
-                        .replace(WINDOWS_PATH_PREFIX_TO_REMOVE, "") \
-                        .replace(MACOS_PATH_PREFIX_TO_REMOVE, "") \
-                        .replace("\\", "/")
-
-                    line[i] = img_path_prefix + line[i]
+                    line[i] = img_path_prefix + "IMG/" + line[i].strip().replace("\\", "/").split("/")[-1]
                 lines.append(line)
     return lines
 
