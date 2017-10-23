@@ -90,6 +90,7 @@ The final model architecture (model.py lines 142-157) is the same as the NVIDIA 
 To capture good driving behavior, I first recorded two laps on track one using center lane driving.
 
 Here is an example image of center lane driving:
+
 ![Image Cropping][./writeup_images/before_and_after_crop.jpg]
 
 I then recorded another two laps driving in the center of the lane.
