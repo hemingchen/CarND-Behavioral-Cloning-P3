@@ -1,6 +1,6 @@
 data
 .ipynb_checkpoints
-*.h5
+#*.h5
 models
 *.swp
 *.p
@@ -10,3 +10,6 @@ test_images_output
 test_videos_output
 traffic-signs-data
 data
+tested_models
+good_models
+recording
